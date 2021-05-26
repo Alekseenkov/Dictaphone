@@ -31,8 +31,7 @@ namespace Dictaphone
         {
             this.components = new System.ComponentModel.Container();
             this.buttonPlay = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
+            this.buttonRecord = new System.Windows.Forms.Button();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.labelTimeRecord = new System.Windows.Forms.Label();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
@@ -42,7 +41,7 @@ namespace Dictaphone
             // 
             // buttonPlay
             // 
-            this.buttonPlay.Location = new System.Drawing.Point(13, 92);
+            this.buttonPlay.Location = new System.Drawing.Point(3, 92);
             this.buttonPlay.Name = "buttonPlay";
             this.buttonPlay.Size = new System.Drawing.Size(94, 29);
             this.buttonPlay.TabIndex = 2;
@@ -50,25 +49,16 @@ namespace Dictaphone
             this.buttonPlay.UseVisualStyleBackColor = true;
             this.buttonPlay.Click += new System.EventHandler(this.buttonPlay_Click);
             // 
-            // button2
+            // buttonRecord
             // 
-            this.button2.Location = new System.Drawing.Point(248, 169);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(94, 29);
-            this.button2.TabIndex = 3;
-            this.button2.Text = "Pause";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.buttonPause_Click);
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(348, 169);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(94, 29);
-            this.button3.TabIndex = 4;
-            this.button3.Text = "Record";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.buttonRecord_Click);
+            this.buttonRecord.BackgroundImage = global::Dictaphone.Properties.Resources.on;
+            this.buttonRecord.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.buttonRecord.Location = new System.Drawing.Point(301, 61);
+            this.buttonRecord.Name = "buttonRecord";
+            this.buttonRecord.Size = new System.Drawing.Size(60, 60);
+            this.buttonRecord.TabIndex = 4;
+            this.buttonRecord.UseVisualStyleBackColor = true;
+            this.buttonRecord.Click += new System.EventHandler(this.buttonRecord_Click);
             // 
             // timer1
             // 
@@ -78,9 +68,10 @@ namespace Dictaphone
             // labelTimeRecord
             // 
             this.labelTimeRecord.AutoSize = true;
-            this.labelTimeRecord.Location = new System.Drawing.Point(329, 125);
+            this.labelTimeRecord.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.labelTimeRecord.Location = new System.Drawing.Point(312, 13);
             this.labelTimeRecord.Name = "labelTimeRecord";
-            this.labelTimeRecord.Size = new System.Drawing.Size(30, 20);
+            this.labelTimeRecord.Size = new System.Drawing.Size(40, 28);
             this.labelTimeRecord.TabIndex = 5;
             this.labelTimeRecord.Text = ".......";
             // 
@@ -91,21 +82,23 @@ namespace Dictaphone
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(232, 28);
             this.comboBox1.TabIndex = 6;
+            this.comboBox1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.comboBox1_KeyPress);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Segoe UI", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.label1.Location = new System.Drawing.Point(13, 13);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(50, 20);
+            this.label1.Size = new System.Drawing.Size(149, 25);
             this.label1.TabIndex = 7;
-            this.label1.Text = "label1";
+            this.label1.Text = "Audio recordings";
             // 
             // buttonDelete
             // 
-            this.buttonDelete.Location = new System.Drawing.Point(176, 92);
+            this.buttonDelete.Location = new System.Drawing.Point(163, 92);
             this.buttonDelete.Name = "buttonDelete";
-            this.buttonDelete.Size = new System.Drawing.Size(59, 29);
+            this.buttonDelete.Size = new System.Drawing.Size(72, 29);
             this.buttonDelete.TabIndex = 8;
             this.buttonDelete.Text = "Delete";
             this.buttonDelete.UseVisualStyleBackColor = true;
@@ -115,16 +108,15 @@ namespace Dictaphone
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(476, 237);
+            this.ClientSize = new System.Drawing.Size(405, 150);
             this.Controls.Add(this.buttonDelete);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.labelTimeRecord);
-            this.Controls.Add(this.button3);
-            this.Controls.Add(this.button2);
+            this.Controls.Add(this.buttonRecord);
             this.Controls.Add(this.buttonPlay);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Dictaphone";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -133,8 +125,7 @@ namespace Dictaphone
 
         #endregion
         private System.Windows.Forms.Button buttonPlay;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button buttonRecord;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.Label labelTimeRecord;
         private System.Windows.Forms.ComboBox comboBox1;
