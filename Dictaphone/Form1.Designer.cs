@@ -37,15 +37,17 @@ namespace Dictaphone
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.buttonDelete = new System.Windows.Forms.Button();
+            this.buttonStop = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // buttonPlay
             // 
-            this.buttonPlay.Location = new System.Drawing.Point(3, 92);
+            this.buttonPlay.BackgroundImage = global::Dictaphone.Properties.Resources.play;
+            this.buttonPlay.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.buttonPlay.Location = new System.Drawing.Point(12, 80);
             this.buttonPlay.Name = "buttonPlay";
-            this.buttonPlay.Size = new System.Drawing.Size(94, 29);
+            this.buttonPlay.Size = new System.Drawing.Size(40, 40);
             this.buttonPlay.TabIndex = 2;
-            this.buttonPlay.Text = "Play";
             this.buttonPlay.UseVisualStyleBackColor = true;
             this.buttonPlay.Click += new System.EventHandler(this.buttonPlay_Click);
             // 
@@ -96,7 +98,7 @@ namespace Dictaphone
             // 
             // buttonDelete
             // 
-            this.buttonDelete.Location = new System.Drawing.Point(163, 92);
+            this.buttonDelete.Location = new System.Drawing.Point(163, 86);
             this.buttonDelete.Name = "buttonDelete";
             this.buttonDelete.Size = new System.Drawing.Size(72, 29);
             this.buttonDelete.TabIndex = 8;
@@ -104,11 +106,23 @@ namespace Dictaphone
             this.buttonDelete.UseVisualStyleBackColor = true;
             this.buttonDelete.Click += new System.EventHandler(this.buttonDelete_Click);
             // 
+            // buttonStop
+            // 
+            this.buttonStop.BackgroundImage = global::Dictaphone.Properties.Resources.stop;
+            this.buttonStop.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.buttonStop.Location = new System.Drawing.Point(58, 81);
+            this.buttonStop.Name = "buttonStop";
+            this.buttonStop.Size = new System.Drawing.Size(40, 40);
+            this.buttonStop.TabIndex = 9;
+            this.buttonStop.UseVisualStyleBackColor = true;
+            this.buttonStop.Click += new System.EventHandler(this.buttonStop_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(405, 150);
+            this.Controls.Add(this.buttonStop);
             this.Controls.Add(this.buttonDelete);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.comboBox1);
@@ -131,6 +145,7 @@ namespace Dictaphone
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button buttonDelete;
+        private System.Windows.Forms.Button buttonStop;
     }
 }
 

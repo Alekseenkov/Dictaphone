@@ -18,9 +18,11 @@ namespace Dictaphone
     public partial class Form1 : Form
     {
         WaveIn waveIn;                                                                            // WaveIn - поток для записи
-        WaveFileWriter writer;                                                                    //Класс для записи в файл
-
+        WaveFileWriter writer;
+        WaveOutEvent player = new ();
         List<string> Filenames = new();
+
+        int recordTime = 0;    
 
         /// <summary>
         /// //////////
@@ -28,6 +30,7 @@ namespace Dictaphone
         public Form1()
         {
             InitializeComponent();
+
         }
         void updateFileList()
         {
@@ -44,8 +47,6 @@ namespace Dictaphone
                 comboBox1.Items.Add(file.Name);
             }
         }
-
-
 
         //Получение данных из входного буфера 
         void waveIn_DataAvailable(object sender, WaveInEventArgs e)
@@ -89,29 +90,30 @@ namespace Dictaphone
         private void Form1_Load(object sender, EventArgs e)
         {
             updateFileList();
-
         }
 
-        //private void buttonNo_Click(object sender, EventArgs e)
-        //{
-
-        //}
-
-        //private void buttonYes_Click(object sender, EventArgs e)
-        //{
-
-        //}
+       
 
         private void buttonPlay_Click(object sender, EventArgs e)
         {
-            var fileFullName = @"D:\DistaphoneMedia\" + comboBox1.SelectedItem.ToString();
-            var mainOutputStream = new WaveFileReader(fileFullName);
+            try
+            {
+                var fileFullName = @"D:\DistaphoneMedia\" + comboBox1.SelectedItem.ToString();
+                var mainOutputStream = new WaveFileReader(fileFullName);
 
-            var volumeStream = new WaveChannel32(mainOutputStream);
-            var player = new WaveOutEvent();
+                var volumeStream = new WaveChannel32(mainOutputStream);
 
-            player.Init(volumeStream);
-            player.Play();
+
+                player.Init(volumeStream);
+                player.Play();
+            }
+            catch (Exception ex)
+            {
+                
+                MessageBox.Show("Select the recording to play!", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            
 
         }
 
@@ -128,14 +130,14 @@ namespace Dictaphone
 
             if (stateButtonRecord)
             {
-                this.buttonRecord.BackgroundImage = global::Dictaphone.Properties.Resources.on;    //смена картинки на кнопке 
+                buttonRecord.BackgroundImage = Properties.Resources.on;    //смена картинки на кнопке 
 
                 if (waveIn != null)
                     StopRecording();     //остановка записи 
             }
             else
             {
-                this.buttonRecord.BackgroundImage = global::Dictaphone.Properties.Resources.off;      //смена картинки на кнопке 
+                buttonRecord.BackgroundImage = Properties.Resources.off;      //смена картинки на кнопке 
  
                 if (Filenames.IndexOf("") == -1)                                              //проверка списка файлов на наличие свободного места 
                     MessageBox.Show("Места нет \n Удалите записи");
@@ -167,7 +169,7 @@ namespace Dictaphone
 
         }
 
-        int recordTime = 0;
+       
         private void timer1_Tick(object sender, EventArgs e)
         {
             recordTime++;
@@ -182,7 +184,6 @@ namespace Dictaphone
 
         private void buttonDelete_Click(object sender, EventArgs e)
         {
-
             var fileFullName = @"D:\DistaphoneMedia\" + comboBox1.SelectedItem.ToString();
 
             Filenames[Filenames.IndexOf(fileFullName)] = "";      //////удаление файла из списка 
@@ -195,6 +196,13 @@ namespace Dictaphone
         {
             e.Handled = true;
         }
+
+        private void buttonStop_Click(object sender, EventArgs e)
+        {
+            player.Stop();
+        }
+
+        
     }
 }
 
