@@ -21,6 +21,7 @@ namespace Dictaphone
         WaveFileWriter writer;
         WaveOutEvent player = new ();
         List<string> Filenames = new();
+        string fileFullName = "";
 
         int recordTime = 0;    
 
@@ -98,6 +99,7 @@ namespace Dictaphone
         {
             try
             {
+               
                 var fileFullName = @"D:\DistaphoneMedia\" + comboBox1.SelectedItem.ToString();
                 var mainOutputStream = new WaveFileReader(fileFullName);
 
@@ -109,24 +111,38 @@ namespace Dictaphone
             }
             catch (Exception ex)
             {
-                
+
                 MessageBox.Show("Select the recording to play!", "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            
+
+            //if (comboBox1.SelectedItem.ToString() == "")
+            //{
+            //    MessageBox.Show("Select the recording to play!", "Error",
+            //    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //}
+            //try{
+            //    player.Play();
+            //}
+            //catch (Exception ex)
+            //{
+
+            //    MessageBox.Show("Select the recording to play!", "Error",
+            //        MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //}
 
         }
 
-        private void buttonPause_Click(object sender, EventArgs e)
-        {
-            //if (waveIn != null)
-            //    StopRecording();
-        }
+        //    private void buttonPause_Click(object sender, EventArgs e)
+        //{
+        //    //if (waveIn != null)
+        //    //    StopRecording();
+        //}
 
         bool stateButtonRecord = true;
         private void buttonRecord_Click(object sender, EventArgs e)
         {//////
-            stateButtonRecord = !stateButtonRecord;
+           
 
             if (stateButtonRecord)
             {
@@ -134,10 +150,12 @@ namespace Dictaphone
 
                 if (waveIn != null)
                     StopRecording();     //остановка записи 
+
+                stateButtonRecord = !stateButtonRecord;
             }
             else
             {
-                buttonRecord.BackgroundImage = Properties.Resources.off;      //смена картинки на кнопке 
+               
  
                 if (Filenames.IndexOf("") == -1)                                              //проверка списка файлов на наличие свободного места 
                     MessageBox.Show("Места нет \n Удалите записи");
@@ -158,6 +176,8 @@ namespace Dictaphone
 
                         waveIn.StartRecording();      //Начало записи
                         timer1.Enabled = true;   // запуск таймера на запись 
+                        stateButtonRecord = !stateButtonRecord;
+                        buttonRecord.BackgroundImage = Properties.Resources.off;      //смена картинки на кнопке 
                     }
                     catch (Exception ex)
                     {
@@ -166,7 +186,7 @@ namespace Dictaphone
                 }
             }
 
-
+           
         }
 
        
@@ -180,11 +200,15 @@ namespace Dictaphone
             }
             ///////////////////////////////
             labelTimeRecord.Text = recordTime.ToString();
+            stateButtonRecord = !stateButtonRecord;
+
+            buttonRecord.BackgroundImage = Properties.Resources.on;
         }
 
         private void buttonDelete_Click(object sender, EventArgs e)
         {
-            var fileFullName = @"D:\DistaphoneMedia\" + comboBox1.SelectedItem.ToString();
+           
+            //var fileFullName = @"D:\DistaphoneMedia\" + comboBox1.SelectedItem.ToString();
 
             Filenames[Filenames.IndexOf(fileFullName)] = "";      //////удаление файла из списка 
             File.Delete(fileFullName);                            /////удаление файлов из папки 
@@ -202,7 +226,54 @@ namespace Dictaphone
             player.Stop();
         }
 
-        
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+            //fileFullName = @"D:\DistaphoneMedia\" + comboBox1.Text;
+             fileFullName = @"D:\DistaphoneMedia\" + comboBox1.SelectedItem.ToString();
+
+            //try
+            //{
+            //    var fileFullName = @"D:\DistaphoneMedia\" + comboBox1.SelectedItem.ToString();
+            //    var mainOutputStream = new WaveFileReader(fileFullName);
+
+            //    var volumeStream = new WaveChannel32(mainOutputStream);
+
+            //    player.Init(volumeStream);
+            //}
+            //catch (Exception ex)
+            //{
+            //    player.Stop();
+            //    comboBox1.SelectedItem = "";
+
+            //    MessageBox.Show("You need to stop playing the file!", "Error",
+            //        MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //}
+
+        }
+
+        private void comboBox1_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+
+            //try
+            //{
+            //    var fileFullName = @"D:\DistaphoneMedia\" + comboBox1.SelectedItem.ToString();
+            //    var mainOutputStream = new WaveFileReader(fileFullName);
+
+            //    var volumeStream = new WaveChannel32(mainOutputStream);
+
+            //    player.Init(volumeStream);
+            //}
+            //catch (Exception ex)
+            //{
+            //    player.Stop();
+            //    comboBox1.SelectedItem = "";
+
+            //    MessageBox.Show("You need to stop playing the file!", "Error",
+            //        MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //}
+
+        }
     }
 }
 
