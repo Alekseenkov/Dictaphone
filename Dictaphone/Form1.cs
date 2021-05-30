@@ -70,6 +70,9 @@ namespace Dictaphone
             ///обновление комбо бокса
             updateFileList();
             comboBox1.Text = "";
+
+            buttonRecord.BackgroundImage = Properties.Resources.on;    //смена картинки на кнопке 
+
         }
         //Окончание записи
         private void waveIn_RecordingStopped(object sender, EventArgs e)
@@ -103,25 +106,22 @@ namespace Dictaphone
 
                 var volumeStream = new WaveChannel32(mainOutputStream);
 
-
                 player.Init(volumeStream);
                 player.Play();
             }
             catch (Exception ex)
             {
-                
                 MessageBox.Show("Select the recording to play!", "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             
-
         }
 
-        private void buttonPause_Click(object sender, EventArgs e)
-        {
-            //if (waveIn != null)
-            //    StopRecording();
-        }
+        //private void buttonPause_Click(object sender, EventArgs e)
+        //{
+        //    //if (waveIn != null)
+        //    //    StopRecording();
+        //}
 
         bool stateButtonRecord = true;
         private void buttonRecord_Click(object sender, EventArgs e)
@@ -130,14 +130,11 @@ namespace Dictaphone
 
             if (stateButtonRecord)
             {
-                buttonRecord.BackgroundImage = Properties.Resources.on;    //смена картинки на кнопке 
-
                 if (waveIn != null)
                     StopRecording();     //остановка записи 
             }
             else
             {
-                buttonRecord.BackgroundImage = Properties.Resources.off;      //смена картинки на кнопке 
  
                 if (Filenames.IndexOf("") == -1)                                              //проверка списка файлов на наличие свободного места 
                     MessageBox.Show("Места нет \n Удалите записи");
@@ -153,11 +150,12 @@ namespace Dictaphone
                         waveIn.DeviceNumber = 0;                                                //Дефолтное устройство для записи (если оно имеется)
                         waveIn.DataAvailable += waveIn_DataAvailable;                           //Прикрепляем к событию DataAvailable обработчик, возникающий при наличии записываемых данных
                         waveIn.RecordingStopped += waveIn_RecordingStopped;                     //Прикрепляем обработчик завершения записи
-                        waveIn.WaveFormat = new WaveFormat(8000, 1);                             //Формат wav-файла - принимает параметры - частоту дискретизации и количество каналов(здесь mono)
-                        writer = new WaveFileWriter(Filenames[findex], waveIn.WaveFormat);       //Инициализируем объект WaveFileWriter
+                        waveIn.WaveFormat = new WaveFormat(8000, 1);                            //Формат wav-файла - принимает параметры - частоту дискретизации и количество каналов(здесь mono)
+                        writer = new WaveFileWriter(Filenames[findex], waveIn.WaveFormat);      //Инициализируем объект WaveFileWriter
 
                         waveIn.StartRecording();      //Начало записи
                         timer1.Enabled = true;   // запуск таймера на запись 
+                        buttonRecord.BackgroundImage = Properties.Resources.off;                //смена картинки на кнопке 
                     }
                     catch (Exception ex)
                     {
@@ -175,9 +173,7 @@ namespace Dictaphone
             recordTime++;
             /////////////////////    если не работает вынести второе условие в тело цикла if 
             if ((recordTime > 10) && (waveIn != null))
-            {
                 StopRecording();
-            }
             ///////////////////////////////
             labelTimeRecord.Text = recordTime.ToString();
         }
