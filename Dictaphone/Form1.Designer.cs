@@ -129,6 +129,8 @@ namespace Dictaphone
             this.Controls.Add(this.labelTimeRecord);
             this.Controls.Add(this.buttonRecord);
             this.Controls.Add(this.buttonPlay);
+            this.MaximumSize = new System.Drawing.Size(423, 197);
+            this.MinimumSize = new System.Drawing.Size(423, 197);
             this.Name = "Form1";
             this.Text = "Dictaphone";
             this.Load += new System.EventHandler(this.Form1_Load);
