@@ -17,16 +17,10 @@ namespace Dictaphone
 {
     public partial class Form1 : Form
     {
-        WaveIn waveIn;                                                                            // WaveIn - поток для записи
-        WaveFileWriter writer;
-        WaveOutEvent player = new ();
-        List<string> Filenames = new();
+        
 
-        int recordTime = 0;    
+        private Dictaphone dictaphone = new();
 
-        /// <summary>
-        /// //////////
-        /// </summary>
         public Form1()
         {
             InitializeComponent();
@@ -34,17 +28,12 @@ namespace Dictaphone
         }
         void updateFileList()
         {
-            for (int i = 0; i < 10; i++)                                                            //добавление в список 10 "null"строк 
-                Filenames.Add("");
-
             comboBox1.Items.Clear();
-            var dir = new DirectoryInfo(@"D:\DistaphoneMedia\");     // папка с файлами 
-
-            foreach (FileInfo file in dir.GetFiles()) // извлекаем все файлы и кидаем их в список 
+            dictaphone.updateListFile();
+            foreach (string file in dictaphone.memory.Filenames)               // извлекаем все файлы и кидаем их в список 
             {
-                string numfile = file.Name.Substring(0, 1);
-                Filenames[Convert.ToInt32(numfile)] = file.FullName;// получаем полный путь к файлу и кидаем его в список 
-                comboBox1.Items.Add(file.Name);
+                if (file!="")
+                comboBox1.Items.Add(file);
             }
         }
 
@@ -55,38 +44,32 @@ namespace Dictaphone
                 this.BeginInvoke(new EventHandler<WaveInEventArgs>(waveIn_DataAvailable), sender, e);
             else
 #pragma warning disable CS0618 // Тип или член устарел
-                writer.WriteData(e.Buffer, 0, e.BytesRecorded);             //Записываем данные из буфера в файл
+                dictaphone.writer.WriteData(e.Buffer, 0, e.BytesRecorded);             //Записываем данные из буфера в файл
 #pragma warning restore CS0618 // Тип или член устарел
         }
+
         //Завершаем запись
         void StopRecording()
         {
-            // MessageBox.Show("StopRecording");
+            dictaphone.StopRecording();
             timer1.Enabled = false;                 //выключение таймера записи 
             labelTimeRecord.Text = ".....";
-            recordTime = 0;
-            //////////////
-            waveIn.StopRecording();
-            ///обновление комбо бокса
-            updateFileList();
+           
+            updateFileList();         ///обновление комбо бокса
             comboBox1.Text = "";
-
             buttonRecord.BackgroundImage = Properties.Resources.on;    //смена картинки на кнопке 
-
         }
         //Окончание записи
         private void waveIn_RecordingStopped(object sender, EventArgs e)
         {
             if (this.InvokeRequired)
-            {
                 this.BeginInvoke(new EventHandler(waveIn_RecordingStopped), sender, e);
-            }
             else
             {
-                waveIn.Dispose();
-                waveIn = null;
-                writer.Close();
-                writer = null;
+                dictaphone.waveIn.Dispose();
+                dictaphone.waveIn = null;
+                dictaphone.writer.Close();
+                dictaphone.writer = null;
             }
         }
 
@@ -101,13 +84,7 @@ namespace Dictaphone
         {
             try
             {
-                var fileFullName = @"D:\DistaphoneMedia\" + comboBox1.SelectedItem.ToString();
-                var mainOutputStream = new WaveFileReader(fileFullName);
-
-                var volumeStream = new WaveChannel32(mainOutputStream);
-
-                player.Init(volumeStream);
-                player.Play();
+                dictaphone.Play(comboBox1.SelectedItem.ToString());
             }
             catch (Exception ex)
             {
@@ -117,11 +94,7 @@ namespace Dictaphone
             
         }
 
-        //private void buttonPause_Click(object sender, EventArgs e)
-        //{
-        //    //if (waveIn != null)
-        //    //    StopRecording();
-        //}
+        
 
         bool stateButtonRecord = true;
         private void buttonRecord_Click(object sender, EventArgs e)
@@ -129,63 +102,53 @@ namespace Dictaphone
             stateButtonRecord = !stateButtonRecord;
 
             if (stateButtonRecord)
-            {
-                if (waveIn != null)
-                    StopRecording();     //остановка записи 
-            }
+                StopRecording();                    //остановка записи 
             else
             {
- 
-                if (Filenames.IndexOf("") == -1)                                              //проверка списка файлов на наличие свободного места 
-                    MessageBox.Show("Места нет \n Удалите записи");
-                else
-                {
-                    int findex = Filenames.IndexOf("");                                       //индекс пистого места куда можнот записать файл 
-                    Filenames[findex] = @"D:\DistaphoneMedia\" + findex.ToString() + ".wav";   //в списке файлов создаем путь записи файла 
-                        
+                if (dictaphone.memory.isFreeSpace())                                              //проверка списка файлов на наличие свободного места 
+                 {  
                     try
                     {
-                        //  MessageBox.Show("Start Recording");
-                        waveIn = new WaveIn();
-                        waveIn.DeviceNumber = 0;                                                //Дефолтное устройство для записи (если оно имеется)
-                        waveIn.DataAvailable += waveIn_DataAvailable;                           //Прикрепляем к событию DataAvailable обработчик, возникающий при наличии записываемых данных
-                        waveIn.RecordingStopped += waveIn_RecordingStopped;                     //Прикрепляем обработчик завершения записи
-                        waveIn.WaveFormat = new WaveFormat(8000, 1);                            //Формат wav-файла - принимает параметры - частоту дискретизации и количество каналов(здесь mono)
-                        writer = new WaveFileWriter(Filenames[findex], waveIn.WaveFormat);      //Инициализируем объект WaveFileWriter
-
-                        waveIn.StartRecording();      //Начало записи
+                        dictaphone.Record_ON();
+                        dictaphone.waveIn.DataAvailable += waveIn_DataAvailable;                           //Прикрепляем к событию DataAvailable обработчик, возникающий при наличии записываемых данных
+                        dictaphone.waveIn.RecordingStopped += waveIn_RecordingStopped;                     //Прикрепляем обработчик завершения записи
+                        dictaphone.waveIn.WaveFormat = new WaveFormat(8000, 1);                            //Формат wav-файла - принимает параметры - частоту дискретизации и количество каналов(здесь mono)
+                        
                         timer1.Enabled = true;   // запуск таймера на запись 
                         buttonRecord.BackgroundImage = Properties.Resources.off;                //смена картинки на кнопке 
                     }
-                    catch (Exception ex)
-                    {
+                    catch (Exception ex){
                         MessageBox.Show(ex.Message);
                     }
                 }
+                else
+                    MessageBox.Show("No space \n Delete audio recordings!", "Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                
             }
-
-
         }
 
        
         private void timer1_Tick(object sender, EventArgs e)
         {
-            recordTime++;
-            /////////////////////    если не работает вынести второе условие в тело цикла if 
-            if ((recordTime > 10) && (waveIn != null))
+            dictaphone.recordTime++;
+            
+            if ((dictaphone.recordTime > 10) && (dictaphone.waveIn != null))
                 StopRecording();
-            ///////////////////////////////
-            labelTimeRecord.Text = recordTime.ToString();
+            labelTimeRecord.Text = dictaphone.recordTime.ToString();
         }
 
         private void buttonDelete_Click(object sender, EventArgs e)
         {
-            var fileFullName = @"D:\DistaphoneMedia\" + comboBox1.SelectedItem.ToString();
-
-            Filenames[Filenames.IndexOf(fileFullName)] = "";      //////удаление файла из списка 
-            File.Delete(fileFullName);                            /////удаление файлов из папки 
-            updateFileList();                                    ///обновление комбо бокса
-            comboBox1.Text = "";
+            try {
+                dictaphone.deleteFile(comboBox1.SelectedItem.ToString());
+                updateFileList();                                    ///обновление комбо бокса
+                comboBox1.Text = "";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void comboBox1_KeyPress(object sender, KeyPressEventArgs e)
@@ -195,9 +158,8 @@ namespace Dictaphone
 
         private void buttonStop_Click(object sender, EventArgs e)
         {
-            player.Stop();
+            dictaphone.Stop();
         }
-
         
     }
 }
