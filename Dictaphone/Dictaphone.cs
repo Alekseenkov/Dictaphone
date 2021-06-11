@@ -13,14 +13,17 @@ namespace Dictaphone
 {
     class Dictaphone
     {
-        
         public WaveIn waveIn { get; set; }                                    // WaveIn - поток для записи
         public WaveFileWriter writer { get; set; }
         public WaveOutEvent player { get; set; } = new();
         public Memory memory { get; } = new();
-        public int recordTime { get; set; } = 0;                                //время записи соообщения 
-        
-         public void updateListFile()
+        public int recordTime { get; set; }                                 //время записи соообщения 
+
+        public Dictaphone() {
+            recordTime = 0;
+        }
+
+        public void updateListFile()
         {
             memory.loadFileList();
         }
@@ -29,7 +32,6 @@ namespace Dictaphone
         {
             recordTime = 0;
             waveIn.StopRecording();
-            
             updateListFile(); ///обновление комбо бокса
         }
        
@@ -69,26 +71,23 @@ namespace Dictaphone
                 }
                 catch (Exception ex)
                 {
-                    //  MessageBox.Show(ex.Message);
+                     //  MessageBox.Show(ex.Message);
                 }
             
         }
 
         public void Record_OFF()
-        {//////
+        {
                 if (waveIn != null)
                     StopRecording();     //остановка записи
         }
 
         public void deleteFile(string file)
         {
-            memory.deleteFile(file);
-            memory.loadFileList();
-            //updateFileList();                                    ///обновление комбо бокса
-            
+            memory.deleteFile(file);      //удаление файла из памяти 
+            memory.loadFileList();        //обновление листа 
+           
         }
-
-       
 
         public void Stop()
         {
