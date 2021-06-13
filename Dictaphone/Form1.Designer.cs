@@ -38,6 +38,11 @@ namespace Dictaphone
             this.label1 = new System.Windows.Forms.Label();
             this.buttonDelete = new System.Windows.Forms.Button();
             this.buttonStop = new System.Windows.Forms.Button();
+            this.labelTimeMode = new System.Windows.Forms.Label();
+            this.labelModeDictaphone = new System.Windows.Forms.Label();
+            this.labelChargePercent = new System.Windows.Forms.Label();
+            this.timer2 = new System.Windows.Forms.Timer(this.components);
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // buttonPlay
@@ -117,11 +122,59 @@ namespace Dictaphone
             this.buttonStop.UseVisualStyleBackColor = true;
             this.buttonStop.Click += new System.EventHandler(this.buttonStop_Click);
             // 
+            // labelTimeMode
+            // 
+            this.labelTimeMode.AutoSize = true;
+            this.labelTimeMode.Location = new System.Drawing.Point(13, 140);
+            this.labelTimeMode.Name = "labelTimeMode";
+            this.labelTimeMode.Size = new System.Drawing.Size(12, 20);
+            this.labelTimeMode.TabIndex = 10;
+            this.labelTimeMode.Text = ".";
+            // 
+            // labelModeDictaphone
+            // 
+            this.labelModeDictaphone.AutoSize = true;
+            this.labelModeDictaphone.Location = new System.Drawing.Point(107, 140);
+            this.labelModeDictaphone.Name = "labelModeDictaphone";
+            this.labelModeDictaphone.Size = new System.Drawing.Size(12, 20);
+            this.labelModeDictaphone.TabIndex = 11;
+            this.labelModeDictaphone.Text = ".";
+            // 
+            // labelChargePercent
+            // 
+            this.labelChargePercent.AutoSize = true;
+            this.labelChargePercent.Location = new System.Drawing.Point(245, 140);
+            this.labelChargePercent.Name = "labelChargePercent";
+            this.labelChargePercent.Size = new System.Drawing.Size(12, 20);
+            this.labelChargePercent.TabIndex = 12;
+            this.labelChargePercent.Text = ".";
+            // 
+            // timer2
+            // 
+            this.timer2.Enabled = true;
+            this.timer2.Interval = 1000;
+            this.timer2.Tick += new System.EventHandler(this.timer2_Tick);
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(301, 140);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(83, 24);
+            this.checkBox1.TabIndex = 14;
+            this.checkBox1.Text = ">-------";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(405, 150);
+            this.ClientSize = new System.Drawing.Size(382, 163);
+            this.Controls.Add(this.checkBox1);
+            this.Controls.Add(this.labelChargePercent);
+            this.Controls.Add(this.labelModeDictaphone);
+            this.Controls.Add(this.labelTimeMode);
             this.Controls.Add(this.buttonStop);
             this.Controls.Add(this.buttonDelete);
             this.Controls.Add(this.label1);
@@ -129,8 +182,8 @@ namespace Dictaphone
             this.Controls.Add(this.labelTimeRecord);
             this.Controls.Add(this.buttonRecord);
             this.Controls.Add(this.buttonPlay);
-            this.MaximumSize = new System.Drawing.Size(423, 197);
-            this.MinimumSize = new System.Drawing.Size(423, 197);
+            this.MaximumSize = new System.Drawing.Size(400, 210);
+            this.MinimumSize = new System.Drawing.Size(400, 210);
             this.Name = "Form1";
             this.Text = "Dictaphone";
             this.Load += new System.EventHandler(this.Form1_Load);
@@ -148,6 +201,12 @@ namespace Dictaphone
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button buttonDelete;
         private System.Windows.Forms.Button buttonStop;
+        private System.Windows.Forms.Label labelTimeMode;
+        private System.Windows.Forms.Label labelModeDictaphone;
+        private System.Windows.Forms.Label label;
+        private System.Windows.Forms.Label labelChargePercent;
+        private System.Windows.Forms.Timer timer2;
+        private System.Windows.Forms.CheckBox checkBox1;
     }
 }
 

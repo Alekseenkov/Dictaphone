@@ -18,6 +18,8 @@ namespace Dictaphone
         public WaveOutEvent player { get; set; } = new();
         public Memory memory { get; } = new();
         public int recordTime { get; set; }                                 //время записи соообщения 
+       
+
 
         public Dictaphone() {
             recordTime = 0;
@@ -92,6 +94,7 @@ namespace Dictaphone
         public void Stop()
         {
             player.Stop();
+            recordTime = 0;
         }
 
 
